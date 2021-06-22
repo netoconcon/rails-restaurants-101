@@ -1,5 +1,5 @@
 class RestaurantsController < ApplicationController
-  before_action :set_restaurant, except: [:index, :new]
+  before_action :set_restaurant, except: [:index, :new, :create]
 
   def index
     # vai mandar meu model buscar todos restaurantes no db
@@ -8,6 +8,11 @@ class RestaurantsController < ApplicationController
 
   def show
     # buscar info de um rest especifico
+
+    @review = Review.new # cria um review vazia para o form
+    
+    # @reviews = @restaurant.reviews  # => todas reviews do restaurante
+    @reviews = Review.where(restaurant: @restaurant, visible: true)
   end
 
   def new
@@ -17,16 +22,22 @@ class RestaurantsController < ApplicationController
 
   def create
     @restaurant = Restaurant.new(restaurant_params)
-    @restaurant.save
-    redirect_to restaurant_path(@restaurant)
+    if @restaurant.save
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :new
+    end
   end
 
   def edit
   end
 
   def update
-    @restaurant.update(restaurant_params)
-    redirect_to restaurant_path(@restaurant)
+    if @restaurant.update(restaurant_params)
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :edit
+    end
   end
 
   def destroy

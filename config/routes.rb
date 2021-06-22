@@ -22,7 +22,13 @@ Rails.application.routes.draw do
 
   # # deletar restaurante
   # delete '/restaurants/:id', to: 'restaurants#destroy'
-  resources :restaurants
+  
+  resources :restaurants do
+    resources :reviews, only: [:new, :create]
+  end
+  resources :reviews do
+    patch 'hide-review', to: 'reviews#hide', as: :hide
+  end
 
   # resources :restaurants, except: [:index, :show, :new]
   # resources :restaurants, only: [:index, :show, :new]

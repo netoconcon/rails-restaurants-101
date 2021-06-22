@@ -3,3 +3,21 @@
 <%= link_to 'deletar', restaurant_path(@restaurant), method: :delete, data: { confirm: 'Tem certeza?' } %>
 
 <p> Address: <%= @restaurant.address %> </p>
+
+
+<h5>Avaliações</h5>
+
+
+<%= render 'reviews/new' %>
+
+<% @reviews.each do |review| %>
+  <li>
+    <% review.rating.times do %>
+      *
+    <% end %>
+    -
+    <%= review.content %>
+    <%= review.visible %>
+    <%= link_to "hide", review_hide_path(review), method: :patch, class: 'btn btn-primary btn-sm' %>
+  </li>
+<% end %>
